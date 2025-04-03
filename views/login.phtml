@@ -1,0 +1,29 @@
+<?php require_once "components/header.phtml"; ?>
+
+<section class="login">
+    <h2>Вход</h2>
+    
+        <form id="loginForm" method="POST" action="/login">
+            <div class="form-group">
+                <label for="login">Телефон или почта:</label>
+                <input type="text" id="login" name="login" required value="<?= isset($_SESSION['log_old']['login']) ? $_SESSION['log_old']['login'] : '' ?>">
+            </div>
+    
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="loginError" class="error">
+                <?= $_SESSION['login_error'] ?>
+            </div>
+
+            <div id="captcha-container" class="smart-captcha" data-sitekey="ysc1_lTAktFJeMCs7DgkdcWYERyJUHHZcsQU0TOumIqHib26e3295"></div>
+
+            <button type="submit">Войти</button>
+        </form>
+</section>
+
+<script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
+
+<?php require_once "components/footer.phtml"; ?>

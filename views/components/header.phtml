@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/resourse/css/style.css">
+    <title>Тестовое задание - Регистрация и авторизация на чистом php</title>
+</head>
+<body>
+    <header>
+        <div class="logo"><a href="/">Регистрация и авторизация на чистом php</a></div>
+        <nav class="menu">
+            <ul>
+                <?= var_dump($_SESSION['user_id']) ?>
+                <?php if (isset($_SESSION['user_id'])) : ?>
+                    <li><a href="/personal-account">Личный кабинет</a></li>
+                    <li><form class="logout" method="POST" action="/logout"><button type="submit">Выход</button></form></li>
+                    <?php else: ?>
+                        <li><a href="/registration">Регистрация</a></li>
+                        <li><a href="/login">Вход</a></li>
+                    <?php endif ?>
+            </ul>
+        </nav>
+    </header>
+    

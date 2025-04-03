@@ -1,0 +1,62 @@
+<?php require_once "components/header.phtml"; ?>
+
+<section class="registration">
+    <h2>Регистрация</h2>
+    <form id="registrationForm" method="POST" action="/registration">
+        <div class="form-group">
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" required value="<?= isset($_SESSION['reg_old']['name']) ? $_SESSION['reg_old']['name'] : '' ?>">
+            <div id="nameError" class="error">
+                <?php if (isset($_SESSION['reg_validation_errors']['name'])) :?>
+                    <?php foreach ($_SESSION['reg_validation_errors']['name'] as $error) :?>
+                        <span><?=  $error ?></span>
+                    <?php endforeach ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Телефон:</label>
+            <input type="tel" id="phone" name="phone" required placeholder="+7 (123) 456-78-90" value="<?= isset($_SESSION['reg_old']['phone']) ? $_SESSION['reg_old']['phone'] : '' ?>">
+            <div id="phoneError" class="error">
+                <?php if (isset($_SESSION['reg_validation_errors']['phone'])) :?>
+                    <?php foreach ($_SESSION['reg_validation_errors']['phone'] as $error) :?>
+                        <span><?= $error ?></span>
+                    <?php endforeach ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Почта:</label>
+            <input type="email" id="email" name="email" required value="<?= isset($_SESSION['reg_old']['email']) ? $_SESSION['reg_old']['email'] : '' ?>">
+            <div id="emailError" class="error">
+                <?php if (isset($_SESSION['reg_validation_errors']['email'])) :?>
+                    <?php foreach ($_SESSION['reg_validation_errors']['email'] as $error) :?>
+                        <span><?php $error ?></span>
+                    <?php endforeach ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+            <div id="passwordError" class="error">
+                    <?php if (isset($_SESSION['reg_validation_errors']['password'])) :?>
+                        <?php foreach ($_SESSION['reg_validation_errors']['password'] as $error) :?>
+                            <span><?= $error ?></span>
+                        <?php endforeach ?>
+                    <?php endif; ?>
+                </div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Повторите пароль:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+        </div>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</section>
+<?php require_once "components/footer.phtml"; ?>

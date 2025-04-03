@@ -1,0 +1,73 @@
+body {
+    margin: 0px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: black;
+}
+header a
+{
+    text-decoration: none;
+    color: white; 
+}
+header a:hover
+{
+    text-decoration: none;
+    color: gray;
+    transition: all 0.1s linear;
+}
+header ul {
+    display: flex;
+    gap: 30px;
+    list-style-type: none;
+}
+
+section
+{
+    padding: 20px 30px;
+}
+
+/* form */
+
+section form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 300px;
+}
+section form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+section form .error {
+    color: red;
+}
+section form button
+{
+    margin-top: 5px;
+    background-color: rgb(47, 44, 44);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 3px;
+}
+form.logout button
+{
+    border: none;
+    background-color: transparent;
+    color: white;
+    padding: 0px;
+    margin: 0px; 
+}
+form.logout button:hover
+{
+    text-decoration: none;
+    color: gray;
+    transition: all 0.1s linear;
+}
