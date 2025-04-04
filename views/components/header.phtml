@@ -11,7 +11,6 @@
         <div class="logo"><a href="/">Регистрация и авторизация на чистом php</a></div>
         <nav class="menu">
             <ul>
-                <?= var_dump($_SESSION['user_id']) ?>
                 <?php if (isset($_SESSION['user_id'])) : ?>
                     <li><a href="/personal-account">Личный кабинет</a></li>
                     <li><form class="logout" method="POST" action="/logout"><button type="submit">Выход</button></form></li>

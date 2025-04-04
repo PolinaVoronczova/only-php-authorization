@@ -18,7 +18,7 @@
                 <?= $_SESSION['login_error'] ?>
             </div>
 
-            <div id="captcha-container" class="smart-captcha" data-sitekey="ysc1_lTAktFJeMCs7DgkdcWYERyJUHHZcsQU0TOumIqHib26e3295"></div>
+            <div id="captcha-container" class="smart-captcha" data-sitekey="<?= $_SESSION['client_key'] ?>"></div>
 
             <button type="submit">Войти</button>
         </form>

@@ -6,17 +6,28 @@ use Controllers\User\User;
 use Controllers\User\UserValidator;
 
 define('APP_PATH', dirname(__DIR__));
-define('SMARTCAPTCHA_SERVER_KEY', 'ysc2_lTAktFJeMCs7DgkdcWYEBnv3QFDuQfcyPYuko1Io0ffe005b');
 
 require_once APP_PATH . '/autoload.php';
 
-function check_captcha($token) {
+function setYandexSmartCaptchaToken()
+{
+    $params = parse_ini_file(APP_PATH . '/yandex-smartcaptcha.ini');
+    if ($params === false) {
+        throw new \Exception("Проверьте файл конфигурации yandex-smartcaptcha.ini.");
+    } else {
+        $_SESSION['client_key'] = $params['client_key'];
+        $_SESSION['server_key'] = $params['server_key'];
+    }
+}
+function checkCaptcha($token) {
     $ch = curl_init("https://smartcaptcha.yandexcloud.net/validate");
+
     $args = [
-        "secret" => SMARTCAPTCHA_SERVER_KEY,
+        "secret" => $_SESSION['server_key'],
         "token" => $token,
         "ip" => $_SERVER['REMOTE_ADDR']
     ];
+
     curl_setopt($ch, CURLOPT_TIMEOUT, 1);
     curl_setopt($ch, CURLOPT_POST, true);    
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($args));
@@ -60,6 +71,12 @@ function pdoConnect() : PDO
 
 session_start();
 
+try {
+    setYandexSmartCaptchaToken();
+} catch (\Throwable $e) {
+    echo $e->getMessage();
+}
+
 $router = new Router();
 
 $router->addRoute('GET', '/', function() {
@@ -68,13 +85,18 @@ $router->addRoute('GET', '/', function() {
 
 $router->addRoute('GET', '/registration', function() {
     include APP_PATH . '/views/registration.phtml';
+
     unset($_SESSION["reg_validation_errors"]); 
     unset($_SESSION['reg_old']);
 });
 
 $router->addRoute('POST', '/registration', function() {
-    $pdo = pdoConnect();
-
+    try {
+        $pdo = pdoConnect();
+    } catch (\Throwable $e) {
+        echo $e->getMessage();
+    }
+    
     $validator = new UserValidator($pdo);
     $errors = $validator
         ->uniqueName($_POST['name'])
@@ -101,15 +123,20 @@ $router->addRoute('POST', '/registration', function() {
 });
 
 $router->addRoute('GET', '/login', function() {
-    
     include APP_PATH . '/views/login.phtml';
+
     unset($_SESSION['login_error']);
 });
 
 $router->addRoute('POST', '/login', function() {
-    $pdo = pdoConnect();
+    try {
+        $pdo = pdoConnect();
+    } catch (\Throwable $e) {
+        echo $e->getMessage();
+    }
 
     $user = new User($pdo);
+
     if (!($user->findBy('email', $_POST['login'], true)
         || $user->findBy('phone', $_POST['login'], true))
     ) {
@@ -124,7 +151,7 @@ $router->addRoute('POST', '/login', function() {
 
         header("Location: login");
         exit();
-    } elseif (!check_captcha($_POST['smart-token'])) {
+    } elseif (!checkCaptcha($_POST['smart-token'])) {
         $_SESSION['login_error'] = 'Капча не пройдена.';
 
         header("Location: login");
@@ -143,6 +170,7 @@ $router->addRoute('POST', '/login', function() {
 $router->addRoute('GET', '/personal-account', function() {
     if (isset($_SESSION['user_id'])) {
         include APP_PATH . '/views/personal-account.phtml';
+        
         unset($_SESSION['edit_validation_errors']);
     } else {
         header("Location: /");
@@ -152,7 +180,11 @@ $router->addRoute('GET', '/personal-account', function() {
 });
 
 $router->addRoute('POST', '/personal-account', function() {
-    $pdo = pdoConnect();
+    try {
+        $pdo = pdoConnect();
+    } catch (\Throwable $e) {
+        echo $e->getMessage();
+    }
 
     $validator = new UserValidator($pdo);
     $errors = $validator
